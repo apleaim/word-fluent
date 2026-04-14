@@ -165,6 +165,16 @@
     .pay-opt-desc { font-size: 12px; color: #777; margin-top: 2px; }
     .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
     .modal-actions .btn { flex: 1; text-align: center; }
+    .amount-section { margin-top: 20px; }
+    .amount-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #aaa; margin-bottom: 8px; }
+    .amount-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .amount-btn { flex: 1; min-width: 60px; font-size: 13px; font-weight: 600; padding: 8px 6px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fff; color: #111; cursor: pointer; transition: border-color .15s, background .15s; text-align: center; }
+    .amount-btn:hover { border-color: #0F6E56; }
+    .amount-btn.selected { border-color: #0F6E56; background: #E1F5EE; color: #0F6E56; }
+    .amount-custom-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .amount-custom-row span { font-size: 13px; color: #777; flex-shrink: 0; }
+    .amount-custom-row input { flex: 1; font-size: 14px; padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 8px; outline: none; color: #111; background: #fff; }
+    .amount-custom-row input:focus { border-color: #0F6E56; }
 
     /* Toast */
     .toast {
@@ -273,20 +283,40 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h3>Support Word-Fluent</h3>
-    <p class="modal-sub">Choose your preferred payment method</p>
-    <div class="pay-opts">
-      <div class="pay-opt" id="payCard" onclick="selectPay('card')">
-        <div class="pay-opt-title">Credit / Debit card</div>
-        <div class="pay-opt-desc">Visa, Mastercard, Amex</div>
+    <p class="modal-sub">Every contribution keeps Word-Fluent free for everyone.</p>
+
+    <div class="amount-section">
+      <div class="amount-label">Choose amount (THB)</div>
+      <div class="amount-presets">
+        <button class="amount-btn" onclick="selectAmount(50, this)">฿50</button>
+        <button class="amount-btn" onclick="selectAmount(100, this)">฿100</button>
+        <button class="amount-btn" onclick="selectAmount(200, this)">฿200</button>
+        <button class="amount-btn" onclick="selectAmount(500, this)">฿500</button>
       </div>
-      <div class="pay-opt" id="payQR" onclick="selectPay('qr')">
-        <div class="pay-opt-title">Thai QR payment</div>
-        <div class="pay-opt-desc">PromptPay / any Thai banking app</div>
+      <div class="amount-custom-row">
+        <span>Custom:</span>
+        <input type="number" id="customAmount" placeholder="e.g. 150" min="20" max="100000" oninput="selectCustomAmount(this.value)" />
+        <span>THB</span>
       </div>
     </div>
+
+    <div class="amount-section">
+      <div class="amount-label">Payment method</div>
+      <div class="pay-opts">
+        <div class="pay-opt" id="payCard" onclick="selectPay('card')">
+          <div class="pay-opt-title">Credit / Debit card</div>
+          <div class="pay-opt-desc">Visa, Mastercard, Amex</div>
+        </div>
+        <div class="pay-opt" id="payQR" onclick="selectPay('qr')">
+          <div class="pay-opt-title">Thai QR payment</div>
+          <div class="pay-opt-desc">PromptPay / any Thai banking app</div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal-actions">
       <button class="btn btn-outline" id="cancelBtn">Cancel</button>
-      <button class="btn" id="confirmBtn">Continue</button>
+      <button class="btn" id="confirmBtn">Donate ฿<span id="confirmAmount">50</span></button>
     </div>
   </div>
 </div>
@@ -463,6 +493,29 @@
   });
 
   let selectedPay = null;
+  let selectedAmount = 50; // default ฿50
+
+  function selectAmount(val, el) {
+    selectedAmount = val;
+    // clear custom input
+    document.getElementById('customAmount').value = '';
+    // highlight selected preset
+    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    // update confirm button label
+    document.getElementById('confirmAmount').textContent = val;
+  }
+
+  function selectCustomAmount(val) {
+    const n = parseInt(val);
+    if (n && n >= 20) {
+      selectedAmount = n;
+      // deselect all presets
+      document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+      document.getElementById('confirmAmount').textContent = n;
+    }
+  }
+
   function selectPay(t) {
     selectedPay = t;
     document.getElementById('payCard').classList.toggle('selected', t === 'card');
@@ -470,9 +523,17 @@
   }
 
   document.getElementById('donateBtn').addEventListener('click', function() {
+    // Reset modal state
     selectedPay = null;
+    selectedAmount = 50;
     document.getElementById('payCard').classList.remove('selected');
     document.getElementById('payQR').classList.remove('selected');
+    document.getElementById('customAmount').value = '';
+    document.getElementById('confirmAmount').textContent = '50';
+    // Select ฿50 preset by default
+    const presets = document.querySelectorAll('.amount-btn');
+    presets.forEach(b => b.classList.remove('selected'));
+    if (presets.length > 0) presets[0].classList.add('selected');
     document.getElementById('modalOverlay').classList.add('open');
   });
 
@@ -482,9 +543,11 @@
 
   document.getElementById('confirmBtn').addEventListener('click', async function() {
     if (!selectedPay) { showToast('Please select a payment method'); return; }
+    if (!selectedAmount || selectedAmount < 20) { showToast('Minimum donation is ฿20'); return; }
 
     const btn = document.getElementById('confirmBtn');
-    btn.textContent = 'Loading...';
+    const originalText = btn.innerHTML;
+    btn.innerHTML = 'Loading...';
     btn.disabled = true;
 
     try {
@@ -493,14 +556,13 @@
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
           method: selectedPay === 'qr' ? 'promptpay' : 'card',
-          amount: 50,   // default 50 THB — you can add an amount picker later
+          amount: selectedAmount,
         }),
       });
       const data = await res.json();
 
       if (res.ok && data.checkoutUrl) {
         document.getElementById('modalOverlay').classList.remove('open');
-        // Redirect to Stripe Checkout
         window.location.href = data.checkoutUrl;
       } else {
         document.getElementById('modalOverlay').classList.remove('open');
@@ -510,7 +572,7 @@
       document.getElementById('modalOverlay').classList.remove('open');
       showToast('Network error. Please try again.');
     } finally {
-      btn.textContent = 'Continue';
+      btn.innerHTML = originalText;
       btn.disabled = false;
     }
   });
