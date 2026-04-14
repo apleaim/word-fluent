@@ -166,15 +166,16 @@
     .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
     .modal-actions .btn { flex: 1; text-align: center; }
     .amount-section { margin-top: 20px; }
-    .amount-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #aaa; margin-bottom: 8px; }
-    .amount-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-    .amount-btn { flex: 1; min-width: 60px; font-size: 13px; font-weight: 600; padding: 8px 6px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fff; color: #111; cursor: pointer; transition: border-color .15s, background .15s; text-align: center; }
-    .amount-btn:hover { border-color: #0F6E56; }
-    .amount-btn.selected { border-color: #0F6E56; background: #E1F5EE; color: #0F6E56; }
-    .amount-custom-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-    .amount-custom-row span { font-size: 13px; color: #777; flex-shrink: 0; }
-    .amount-custom-row input { flex: 1; font-size: 14px; padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 8px; outline: none; color: #111; background: #fff; }
-    .amount-custom-row input:focus { border-color: #0F6E56; }
+    .amount-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #aaa; margin-bottom: 10px; }
+    .qty-row { display: flex; align-items: center; gap: 0; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+    .qty-btn { width: 48px; height: 48px; font-size: 22px; font-weight: 400; background: #f9f9f9; color: #111; border: none; cursor: pointer; transition: background .15s; flex-shrink: 0; line-height: 1; }
+    .qty-btn:hover { background: #E1F5EE; color: #0F6E56; }
+    .qty-btn:active { background: #9FE1CB; }
+    .qty-display { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0; height: 48px; }
+    .qty-num { font-size: 20px; font-weight: 600; color: #111; min-width: 24px; text-align: center; }
+    .qty-unit { font-size: 13px; color: #777; }
+    .qty-total { font-size: 13px; color: #777; margin-top: 10px; text-align: right; }
+    .qty-total strong { color: #0F6E56; font-size: 15px; }
 
     /* Toast */
     .toast {
@@ -286,18 +287,16 @@
     <p class="modal-sub">Every contribution keeps Word-Fluent free for everyone.</p>
 
     <div class="amount-section">
-      <div class="amount-label">Choose amount (THB)</div>
-      <div class="amount-presets">
-        <button class="amount-btn" onclick="selectAmount(50, this)">฿50</button>
-        <button class="amount-btn" onclick="selectAmount(100, this)">฿100</button>
-        <button class="amount-btn" onclick="selectAmount(200, this)">฿200</button>
-        <button class="amount-btn" onclick="selectAmount(500, this)">฿500</button>
+      <div class="amount-label">Quantity</div>
+      <div class="qty-row">
+        <button class="qty-btn" id="qtyMinus" onclick="changeQty(-1)">−</button>
+        <div class="qty-display">
+          <span class="qty-num" id="qtyNum">1</span>
+          <span class="qty-unit">× ฿50</span>
+        </div>
+        <button class="qty-btn" id="qtyPlus" onclick="changeQty(1)">+</button>
       </div>
-      <div class="amount-custom-row">
-        <span>Custom:</span>
-        <input type="number" id="customAmount" placeholder="e.g. 150" min="20" max="100000" oninput="selectCustomAmount(this.value)" />
-        <span>THB</span>
-      </div>
+      <div class="qty-total">Total: <strong>฿<span id="qtyTotal">50</span></strong></div>
     </div>
 
     <div class="amount-section">
@@ -492,28 +491,19 @@
     }
   });
 
+  const UNIT_PRICE = 50; // fixed ฿50 per unit
   let selectedPay = null;
-  let selectedAmount = 50; // default ฿50
+  let donateQty = 1;
 
-  function selectAmount(val, el) {
-    selectedAmount = val;
-    // clear custom input
-    document.getElementById('customAmount').value = '';
-    // highlight selected preset
-    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-    el.classList.add('selected');
-    // update confirm button label
-    document.getElementById('confirmAmount').textContent = val;
-  }
-
-  function selectCustomAmount(val) {
-    const n = parseInt(val);
-    if (n && n >= 20) {
-      selectedAmount = n;
-      // deselect all presets
-      document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-      document.getElementById('confirmAmount').textContent = n;
-    }
+  function changeQty(delta) {
+    donateQty = Math.max(1, Math.min(99, donateQty + delta));
+    const total = donateQty * UNIT_PRICE;
+    document.getElementById('qtyNum').textContent = donateQty;
+    document.getElementById('qtyTotal').textContent = total;
+    document.getElementById('confirmAmount').textContent = total;
+    // Disable minus btn at 1
+    document.getElementById('qtyMinus').style.opacity = donateQty === 1 ? '0.35' : '1';
+    document.getElementById('qtyPlus').style.opacity = donateQty === 99 ? '0.35' : '1';
   }
 
   function selectPay(t) {
@@ -525,15 +515,14 @@
   document.getElementById('donateBtn').addEventListener('click', function() {
     // Reset modal state
     selectedPay = null;
-    selectedAmount = 50;
+    donateQty = 1;
     document.getElementById('payCard').classList.remove('selected');
     document.getElementById('payQR').classList.remove('selected');
-    document.getElementById('customAmount').value = '';
+    document.getElementById('qtyNum').textContent = '1';
+    document.getElementById('qtyTotal').textContent = '50';
     document.getElementById('confirmAmount').textContent = '50';
-    // Select ฿50 preset by default
-    const presets = document.querySelectorAll('.amount-btn');
-    presets.forEach(b => b.classList.remove('selected'));
-    if (presets.length > 0) presets[0].classList.add('selected');
+    document.getElementById('qtyMinus').style.opacity = '0.35';
+    document.getElementById('qtyPlus').style.opacity = '1';
     document.getElementById('modalOverlay').classList.add('open');
   });
 
@@ -543,20 +532,19 @@
 
   document.getElementById('confirmBtn').addEventListener('click', async function() {
     if (!selectedPay) { showToast('Please select a payment method'); return; }
-    if (!selectedAmount || selectedAmount < 20) { showToast('Minimum donation is ฿20'); return; }
 
     const btn = document.getElementById('confirmBtn');
-    const originalText = btn.innerHTML;
+    const originalHTML = btn.innerHTML;
     btn.innerHTML = 'Loading...';
     btn.disabled = true;
 
     try {
-      const res  = await fetch('/api/donate', {
+      const res = await fetch('/api/donate', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
           method: selectedPay === 'qr' ? 'promptpay' : 'card',
-          amount: selectedAmount,
+          amount: donateQty * UNIT_PRICE,
         }),
       });
       const data = await res.json();
@@ -572,7 +560,7 @@
       document.getElementById('modalOverlay').classList.remove('open');
       showToast('Network error. Please try again.');
     } finally {
-      btn.innerHTML = originalText;
+      btn.innerHTML = originalHTML;
       btn.disabled = false;
     }
   });
