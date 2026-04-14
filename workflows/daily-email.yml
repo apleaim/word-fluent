@@ -1,0 +1,35 @@
+# .github/workflows/daily-email.yml
+# Runs every day at 7:00 AM Bangkok time (UTC+7 = 00:00 UTC)
+# Calls the /api/send-daily endpoint to send today's word to all subscribers
+# Requires CRON_SECRET and SITE_URL to be set in GitHub repo secrets
+
+name: Send daily word email
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # 00:00 UTC = 07:00 Bangkok (ICT)
+  workflow_dispatch:        # allows manual trigger from GitHub Actions UI
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Trigger daily email send
+        run: |
+          response=$(curl -s -o /tmp/response.json -w "%{http_code}" \
+            -X POST "${{ secrets.SITE_URL }}/api/send-daily" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json")
+
+          echo "HTTP status: $response"
+          echo "Response body:"
+          cat /tmp/response.json
+
+          if [ "$response" != "200" ]; then
+            echo "ERROR: send-daily returned $response"
+            exit 1
+          fi
+
+          echo "Daily email sent successfully!"
