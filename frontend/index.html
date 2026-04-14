@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word-Fluent — Daily B2 to C1 Word Upgrades</title>
+  <meta name="description" content="One B2 word. Four C1 synonyms. Every day. Improve your English vocabulary with Word-Fluent." />
+  <meta property="og:title" content="Word-Fluent" />
+  <meta property="og:description" content="Your daily B2 → C1 word upgrade. Improve your English vocabulary one word at a time." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0F6E56" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230F6E56'/><text y='.9em' font-size='72' x='12' fill='white'>W</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fff;
+      color: #111;
+      line-height: 1.6;
+    }
+
+    /* Layout */
+    .site { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* Nav */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0 16px; border-bottom: 1px solid #e0e0e0;
+    }
+    .nav-logo { font-size: 16px; font-weight: 600; color: #111; letter-spacing: -.01em; text-decoration: none; }
+    .nav-logo span { color: #0F6E56; }
+
+    /* Pages */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* Hero */
+    .hero { padding: 44px 0 8px; }
+    .date-tag {
+      font-size: 11px; font-weight: 600; color: #0F6E56;
+      letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .hero h1 { font-size: 13px; color: #777; font-weight: 400; margin-bottom: 32px; }
+
+    /* B2 block */
+    .b2-block {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+    }
+    .b2-tag {
+      font-size: 11px; font-weight: 600; background: #E1F5EE; color: #0F6E56;
+      padding: 3px 10px; border-radius: 99px; border: 1px solid #5DCAA5; flex-shrink: 0;
+    }
+    .b2-word { font-size: 34px; font-weight: 600; color: #111; }
+    .b2-pos { font-size: 14px; color: #777; font-style: italic; }
+
+    /* Synonym cards */
+    .syn-cards { display: grid; gap: 12px; margin-bottom: 48px; }
+    .scard {
+      border: 1px solid #e0e0e0; border-radius: 10px;
+      padding: 18px 20px; background: #fff;
+    }
+    .scard-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .scard-word { font-size: 18px; font-weight: 600; color: #111; }
+    .scard-ipa { font-size: 13px; color: #777; font-family: 'Courier New', monospace; }
+    .slabel {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .08em; color: #aaa; margin: 10px 0 5px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pill {
+      font-size: 11px; padding: 3px 10px; border-radius: 99px;
+      background: #E1F5EE; color: #0F6E56; border: 1px solid #9FE1CB;
+    }
+    .nuance { font-size: 13px; color: #555; line-height: 1.65; }
+    .example {
+      font-size: 13px; color: #111; line-height: 1.65;
+      border-left: 2px solid #5DCAA5; padding-left: 12px;
+      margin-top: 10px; font-style: italic;
+    }
+
+    /* Divider */
+    hr.divider { border: none; border-top: 1px solid #e0e0e0; margin: 40px 0; }
+
+    /* Subscribe section */
+    .sub-section { text-align: center; max-width: 480px; margin: 0 auto; }
+    .sub-section h2 { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 6px; }
+    .sub-section p { font-size: 13px; color: #777; margin-bottom: 18px; line-height: 1.6; }
+    .sub-row { display: flex; gap: 8px; width: 100%; }
+    .sub-row input {
+      flex: 1; font-size: 14px; padding: 10px 14px;
+      border: 1px solid #e0e0e0; border-radius: 8px;
+      outline: none; background: #fff; color: #111;
+      transition: border-color .15s;
+    }
+    .sub-row input:focus { border-color: #0F6E56; }
+    .sub-note { font-size: 12px; color: #aaa; margin-top: 10px; }
+
+    /* Donate section */
+    .donate-section {
+      margin-top: 40px; padding-top: 32px;
+      border-top: 1px solid #e0e0e0; text-align: center;
+    }
+    .donate-section p { font-size: 13px; color: #777; margin-bottom: 14px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-block; font-size: 13px; font-weight: 600;
+      padding: 9px 20px; background: #0F6E56; color: #fff;
+      border: none; border-radius: 8px; cursor: pointer;
+      transition: background .15s; text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn:hover { background: #111; }
+    .btn-sm { padding: 7px 16px; font-size: 13px; }
+    .btn-outline {
+      background: #fff; color: #0F6E56;
+      border: 1.5px solid #0F6E56;
+    }
+    .btn-outline:hover { background: #E1F5EE; color: #0F6E56; }
+
+    /* History page */
+    .hist-header { padding: 36px 0 20px; border-bottom: 1px solid #e0e0e0; margin-bottom: 24px; }
+    .hist-header h2 { font-size: 22px; font-weight: 600; color: #111; }
+    .hist-header p { font-size: 13px; color: #777; margin-top: 4px; }
+    .hist-row {
+      border-bottom: 1px solid #f0f0f0; padding: 14px 0;
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .hist-date { font-size: 11px; color: #aaa; min-width: 110px; flex-shrink: 0; }
+    .hist-word {
+      font-size: 15px; font-weight: 600; color: #0F6E56;
+      cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+    }
+    .hist-word:hover { color: #085041; }
+    .hist-syns { font-size: 12px; color: #777; }
+
+    /* Word detail page */
+    .back-bar { padding: 24px 0 0; margin-bottom: 4px; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.5); z-index: 200;
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff; border-radius: 14px;
+      padding: 30px 26px; width: 100%; max-width: 340px;
+      border: 1px solid #e0e0e0;
+    }
+    .modal h3 { font-size: 16px; font-weight: 600; color: #111; margin-bottom: 4px; }
+    .modal .modal-sub { font-size: 13px; color: #777; margin-bottom: 22px; }
+    .pay-opts { display: grid; gap: 10px; }
+    .pay-opt {
+      border: 1px solid #e0e0e0; border-radius: 9px;
+      padding: 14px 16px; cursor: pointer; transition: border-color .15s, background .15s;
+    }
+    .pay-opt:hover { border-color: #0F6E56; }
+    .pay-opt.selected { border-color: #0F6E56; background: #E1F5EE; }
+    .pay-opt-title { font-size: 14px; font-weight: 600; color: #111; }
+    .pay-opt-desc { font-size: 12px; color: #777; margin-top: 2px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .modal-actions .btn { flex: 1; text-align: center; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      background: #0F6E56; color: #fff; font-size: 13px; font-weight: 500;
+      padding: 10px 22px; border-radius: 99px;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+      white-space: nowrap; z-index: 300;
+    }
+    .toast.show { opacity: 1; }
+
+    /* Footer */
+    .footer {
+      margin-top: 60px; padding-top: 24px;
+      border-top: 1px solid #e0e0e0;
+      text-align: center; font-size: 12px; color: #bbb;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .site { padding: 0 16px 60px; }
+      .b2-word { font-size: 26px; }
+      .sub-row { flex-direction: column; }
+      .sub-row input { width: 100%; }
+      .modal-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="site">
+  <nav class="nav">
+    <a class="nav-logo" href="#" onclick="goHome()">Word-<span>Fluent</span></a>
+    <button class="btn btn-sm" id="histBtn">History</button>
+  </nav>
+
+  <!-- Main page -->
+  <div class="page active" id="mainPage">
+    <div class="hero">
+      <div class="date-tag" id="todayDate"></div>
+      <h1>Your daily B2 → C1 word upgrade</h1>
+    </div>
+    <div class="b2-block">
+      <span class="b2-tag">B2</span>
+      <span class="b2-word" id="b2Word"></span>
+      <span class="b2-pos" id="b2Pos"></span>
+    </div>
+    <div class="syn-cards" id="synCards"></div>
+
+    <hr class="divider" />
+
+    <div class="sub-section">
+      <h2>Get this daily</h2>
+      <p>One B2 word. Four C1 upgrades. Delivered every morning.</p>
+      <div class="sub-row">
+        <input type="email" id="emailInput" placeholder="your@email.com" />
+        <button class="btn" id="subBtn">Subscribe</button>
+      </div>
+      <div class="sub-note" id="subNote">No spam. Unsubscribe anytime.</div>
+    </div>
+
+    <div class="donate-section">
+      <p>If Word-Fluent helps your English, consider buying us a coffee.</p>
+      <button class="btn" id="donateBtn">Donate</button>
+    </div>
+
+    <footer class="footer">
+      &copy; <span id="year"></span> Word-Fluent &nbsp;·&nbsp; Built with care for English learners
+    </footer>
+  </div>
+
+  <!-- History page -->
+  <div class="page" id="histPage">
+    <div class="hist-header">
+      <h2>Word history</h2>
+      <p>All previous daily words — click a word to revisit its page.</p>
+    </div>
+    <div id="histList"></div>
+    <footer class="footer">
+      &copy; <span class="year"></span> Word-Fluent
+    </footer>
+  </div>
+
+  <!-- Word detail page -->
+  <div class="page" id="wordPage">
+    <div class="back-bar">
+      <button class="btn btn-sm" id="backBtn">← Back to history</button>
+    </div>
+    <div class="hero">
+      <div class="date-tag" id="wordPageDate"></div>
+      <h1>B2 → C1 word upgrade</h1>
+    </div>
+    <div class="b2-block">
+      <span class="b2-tag">B2</span>
+      <span class="b2-word" id="wpWord"></span>
+      <span class="b2-pos" id="wpPos"></span>
+    </div>
+    <div class="syn-cards" id="wpCards"></div>
+    <footer class="footer">
+      &copy; <span class="year"></span> Word-Fluent
+    </footer>
+  </div>
+</div>
+
+<!-- Donate modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Support Word-Fluent</h3>
+    <p class="modal-sub">Choose your preferred payment method</p>
+    <div class="pay-opts">
+      <div class="pay-opt" id="payCard" onclick="selectPay('card')">
+        <div class="pay-opt-title">Credit / Debit card</div>
+        <div class="pay-opt-desc">Visa, Mastercard, Amex</div>
+      </div>
+      <div class="pay-opt" id="payQR" onclick="selectPay('qr')">
+        <div class="pay-opt-title">Thai QR payment</div>
+        <div class="pay-opt-desc">PromptPay / any Thai banking app</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="cancelBtn">Cancel</button>
+      <button class="btn" id="confirmBtn">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const WORDS = [
+    {b2:"angry",pos:"adjective",synonyms:[
+      {word:"irate",ipa:"/aɪˈreɪt/",colls:["irate customer","irate caller","irate letter","become irate"],nuance:"Best for situational, sudden anger in service or professional contexts. Suggests someone visibly furious about a specific grievance.",example:'"The irate passenger demanded to speak to a manager after his flight was cancelled for the third time."'},
+      {word:"incensed",ipa:"/ɪnˈsɛnst/",colls:["deeply incensed","incensed by/at","incensed reaction","absolutely incensed"],nuance:"Conveys moral outrage. Use when anger stems from something profoundly unjust — a sense of principle being violated.",example:'"She was absolutely incensed by the council\'s decision to demolish the community centre without any public consultation."'},
+      {word:"livid",ipa:"/ˈlɪvɪd/",colls:["absolutely livid","go livid","livid with rage","livid about/over"],nuance:"The most intense and colloquial of the four. Signals peak anger, often for personal betrayals. Strongly British spoken English.",example:'"He was absolutely livid when he found out his business partner had been lying to him for months."'},
+      {word:"indignant",ipa:"/ɪnˈdɪɡnənt/",colls:["deeply indignant","indignant tone","rightfully indignant","indignant refusal"],nuance:"Anger mixed with wounded pride — the person feels unfairly treated. More restrained and dignified. Suits formal writing.",example:'"The professor gave an indignant response to the suggestion that his research lacked academic rigour."'}
+    ]},
+    {b2:"tired",pos:"adjective",synonyms:[
+      {word:"exhausted",ipa:"/ɪɡˈzɔːstɪd/",colls:["utterly exhausted","exhausted from","physically exhausted","leave exhausted"],nuance:"Complete depletion of energy, physical or emotional. More intense than 'very tired'.",example:'"After three nights on call, the junior doctor arrived home utterly exhausted."'},
+      {word:"fatigued",ipa:"/fəˈtiːɡd/",colls:["mentally fatigued","combat fatigued","chronic fatigue","fatigued muscles"],nuance:"More clinical or formal register. Often used in medical, professional, or military contexts.",example:'"The study found that fatigued drivers are as dangerous as those over the drink-drive limit."'},
+      {word:"weary",ipa:"/ˈwɪəri/",colls:["world-weary","weary traveller","grow weary of","weary sigh"],nuance:"Carries emotional and existential weight, not just physical. Implies long-term endurance and disillusionment.",example:'"After decades in the same role, she had grown weary of the endless bureaucracy."'},
+      {word:"jaded",ipa:"/ˈdʒeɪdɪd/",colls:["jaded palate","jaded professional","become jaded","jaded outlook"],nuance:"Tired due to overexposure — losing enthusiasm after too much of something. Implies cynicism.",example:'"Even the most jaded critics were impressed by the originality of her debut novel."'}
+    ]},
+    {b2:"happy",pos:"adjective",synonyms:[
+      {word:"elated",ipa:"/ɪˈleɪtɪd/",colls:["absolutely elated","elated at the news","feel elated","elated fans"],nuance:"Intense, soaring joy — typically in response to a specific, sudden piece of good news.",example:'"The team were elated when they heard they\'d won the contract against all odds."'},
+      {word:"content",ipa:"/kənˈtɛnt/",colls:["perfectly content","content with life","feel content","quietly content"],nuance:"A calm, settled satisfaction — not exciting joy but a quiet sense that all is well. Long-lasting rather than sudden.",example:'"He was perfectly content living alone in the cottage with his books and his garden."'},
+      {word:"euphoric",ipa:"/juːˈfɒrɪk/",colls:["euphoric feeling","euphoric crowd","feel euphoric","almost euphoric"],nuance:"An overwhelming, almost intoxicating high. Often associated with physical causes (crowds, exercise).",example:'"Crossing the finish line after 26 miles, she felt euphoric in a way she had never experienced before."'},
+      {word:"jubilant",ipa:"/ˈdʒuːbɪlənt/",colls:["jubilant crowd","jubilant celebrations","jubilant fans","jubilant mood"],nuance:"Public, expressive celebration — usually shared with others. Often in journalism for collective reactions.",example:'"Jubilant supporters flooded the streets outside the stadium long after the final whistle."'}
+    ]},
+    {b2:"sad",pos:"adjective",synonyms:[
+      {word:"despondent",ipa:"/dɪˈspɒndənt/",colls:["deeply despondent","feel despondent","despondent mood","despondent about"],nuance:"A loss of hope and motivation, not just temporary sadness. Often follows failure or prolonged difficulty.",example:'"After her third rejected application, she became increasingly despondent about ever finding work."'},
+      {word:"melancholy",ipa:"/ˈmɛlənkɒli/",colls:["a deep melancholy","melancholy mood","feel melancholy","melancholy air"],nuance:"A reflective, wistful sadness — often literary or poetic. A lingering bittersweet heaviness.",example:'"There was a quiet melancholy to the old photographs, capturing people long since gone."'},
+      {word:"forlorn",ipa:"/fəˈlɔːn/",colls:["forlorn hope","forlorn figure","look forlorn","forlorn expression"],nuance:"Pitifully alone and abandoned. Often used visually to describe how someone appears.",example:'"A forlorn figure stood at the empty bus stop long after the last service had run."'},
+      {word:"disconsolate",ipa:"/dɪsˈkɒnsələt/",colls:["utterly disconsolate","disconsolate after","remain disconsolate","disconsolate players"],nuance:"Grief that cannot be comforted — the strongest of the four. Implies sadness that resists consolation.",example:'"The manager sat disconsolate in the dressing room, unable to find words for his players."'}
+    ]},
+    {b2:"smart",pos:"adjective",synonyms:[
+      {word:"astute",ipa:"/əˈstjuːt/",colls:["astute observer","astute businessman","politically astute","astute judgement"],nuance:"Sharp practical intelligence, especially in reading situations or people. Implies a kind of shrewd wisdom rather than academic brilliance.",example:'"She was astute enough to realise the deal was too good to be true."'},
+      {word:"perceptive",ipa:"/pəˈsɛptɪv/",colls:["perceptive comment","highly perceptive","perceptive analysis","perceptive reader"],nuance:"Skilled at noticing and understanding things that others miss — especially emotions, nuance, or hidden meaning.",example:'"His perceptive review identified flaws in the argument that most critics had overlooked."'},
+      {word:"shrewd",ipa:"/ʃruːd/",colls:["shrewd investor","shrewd move","shrewd negotiator","politically shrewd"],nuance:"Cleverness with a practical or self-interested edge — often used in business or politics. Can carry a slightly calculating connotation.",example:'"It was a shrewd move to acquire the smaller company before its value was widely recognised."'},
+      {word:"discerning",ipa:"/dɪˈsɜːnɪŋ/",colls:["discerning taste","discerning reader","discerning eye","discerning audience"],nuance:"The ability to judge quality and make fine distinctions — often used for aesthetic or cultural taste rather than raw intellect.",example:'"The restaurant has earned a loyal following among discerning diners who value quality over quantity."'}
+    ]},
+    {b2:"difficult",pos:"adjective",synonyms:[
+      {word:"arduous",ipa:"/ˈɑːdjuəs/",colls:["arduous task","arduous journey","arduous process","arduous climb"],nuance:"Physically or mentally demanding over a sustained period. Implies effort and endurance rather than complexity.",example:'"The arduous trek across the mountain took three days and tested every member of the group."'},
+      {word:"formidable",ipa:"/ˈfɔːmɪdəbl/",colls:["formidable challenge","formidable opponent","formidable task","formidable reputation"],nuance:"Difficult because of its scale, power, or impressiveness. Often implies something that inspires a degree of respect or awe alongside the difficulty.",example:'"Rebuilding public trust after the scandal proved a formidable challenge for the new leadership."'},
+      {word:"onerous",ipa:"/ˈɒnərəs/",colls:["onerous task","onerous regulations","onerous responsibility","onerous conditions"],nuance:"Difficult in a burdensome, oppressive way — especially in legal, administrative, or duty-related contexts. More formal register.",example:'"Small businesses complained that the new reporting requirements were unnecessarily onerous."'},
+      {word:"gruelling",ipa:"/ˈɡruːəlɪŋ/",colls:["gruelling schedule","gruelling race","gruelling training","gruelling conditions"],nuance:"Exhausting to the point of being punishing — typically physical. Common in sports journalism and descriptions of demanding professional schedules.",example:'"After a gruelling 14-hour shift, she arrived home too tired to even eat."'}
+    ]},
+  ];
+
+  function getDayIndex() {
+    const epoch = new Date('2024-01-01');
+    return Math.floor((new Date() - epoch) / 86400000) % WORDS.length;
+  }
+
+  function fmtDate(d, opts) {
+    return d.toLocaleDateString('en-GB', opts || {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  }
+
+  function cardHTML(s) {
+    return `<div class="scard">
+      <div class="scard-head"><span class="scard-word">${s.word}</span><span class="scard-ipa">${s.ipa}</span></div>
+      <div class="slabel">Collocations</div>
+      <div class="pills">${s.colls.map(c=>`<span class="pill">${c}</span>`).join('')}</div>
+      <div class="slabel">When to use</div>
+      <p class="nuance">${s.nuance}</p>
+      <p class="example">${s.example}</p>
+    </div>`;
+  }
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function goHome() {
+    showPage('mainPage');
+    document.getElementById('histBtn').textContent = 'History';
+  }
+
+  function renderMain() {
+    const w = WORDS[getDayIndex()];
+    document.getElementById('todayDate').textContent = fmtDate(new Date());
+    document.getElementById('b2Word').textContent = w.b2;
+    document.getElementById('b2Pos').textContent = w.pos;
+    document.getElementById('synCards').innerHTML = w.synonyms.map(cardHTML).join('');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  }
+
+  function renderHistory() {
+    const today = getDayIndex();
+    const rows = [];
+    for (let i = 0; i <= today; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - (today - i));
+      const dateStr = fmtDate(d, {day:'numeric', month:'short', year:'numeric'});
+      rows.unshift(`<div class="hist-row">
+        <span class="hist-date">${dateStr}</span>
+        <span class="hist-word" onclick="openWordPage(${i})">${WORDS[i].b2}</span>
+        <span class="hist-syns">${WORDS[i].synonyms.map(s=>s.word).join(', ')}</span>
+      </div>`);
+    }
+    document.getElementById('histList').innerHTML = rows.join('');
+    document.querySelectorAll('.year').forEach(el => el.textContent = new Date().getFullYear());
+  }
+
+  function openWordPage(idx) {
+    const w = WORDS[idx];
+    const today = getDayIndex();
+    const d = new Date();
+    d.setDate(d.getDate() - (today - idx));
+    document.getElementById('wordPageDate').textContent = fmtDate(d);
+    document.getElementById('wpWord').textContent = w.b2;
+    document.getElementById('wpPos').textContent = w.pos;
+    document.getElementById('wpCards').innerHTML = w.synonyms.map(cardHTML).join('');
+    document.querySelectorAll('.year').forEach(el => el.textContent = new Date().getFullYear());
+    showPage('wordPage');
+  }
+
+  document.getElementById('histBtn').addEventListener('click', function() {
+    const onHist = document.getElementById('histPage').classList.contains('active');
+    if (onHist) {
+      showPage('mainPage');
+      this.textContent = 'History';
+    } else {
+      showPage('histPage');
+      this.textContent = 'Back';
+      renderHistory();
+    }
+  });
+
+  document.getElementById('backBtn').addEventListener('click', function() {
+    showPage('histPage');
+    document.getElementById('histBtn').textContent = 'Back';
+  });
+
+  document.getElementById('subBtn').addEventListener('click', async function() {
+    const v = document.getElementById('emailInput').value.trim();
+    const note = document.getElementById('subNote');
+    const btn  = document.getElementById('subBtn');
+
+    if (!v || !v.includes('@')) {
+      note.style.color = '#e24b4a';
+      note.textContent = 'Please enter a valid email address.';
+      return;
+    }
+
+    // Loading state
+    btn.textContent = 'Subscribing...';
+    btn.disabled = true;
+    note.style.color = '#aaa';
+    note.textContent = 'Saving your email...';
+
+    try {
+      const res  = await fetch('/api/subscribe', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email: v }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        note.style.color = '#0F6E56';
+        note.textContent = "You're subscribed! First email arrives tomorrow morning.";
+        document.getElementById('emailInput').value = '';
+      } else {
+        note.style.color = '#e24b4a';
+        note.textContent = data.error || 'Something went wrong. Please try again.';
+      }
+    } catch (err) {
+      note.style.color = '#e24b4a';
+      note.textContent = 'Network error. Please check your connection and try again.';
+    } finally {
+      btn.textContent = 'Subscribe';
+      btn.disabled = false;
+    }
+  });
+
+  let selectedPay = null;
+  function selectPay(t) {
+    selectedPay = t;
+    document.getElementById('payCard').classList.toggle('selected', t === 'card');
+    document.getElementById('payQR').classList.toggle('selected', t === 'qr');
+  }
+
+  document.getElementById('donateBtn').addEventListener('click', function() {
+    selectedPay = null;
+    document.getElementById('payCard').classList.remove('selected');
+    document.getElementById('payQR').classList.remove('selected');
+    document.getElementById('modalOverlay').classList.add('open');
+  });
+
+  document.getElementById('cancelBtn').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('open');
+  });
+
+  document.getElementById('confirmBtn').addEventListener('click', async function() {
+    if (!selectedPay) { showToast('Please select a payment method'); return; }
+
+    const btn = document.getElementById('confirmBtn');
+    btn.textContent = 'Loading...';
+    btn.disabled = true;
+
+    try {
+      const res  = await fetch('/api/donate', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          method: selectedPay === 'qr' ? 'promptpay' : 'card',
+          amount: 50,   // default 50 THB — you can add an amount picker later
+        }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.checkoutUrl) {
+        document.getElementById('modalOverlay').classList.remove('open');
+        // Redirect to Stripe Checkout
+        window.location.href = data.checkoutUrl;
+      } else {
+        document.getElementById('modalOverlay').classList.remove('open');
+        showToast(data.error || 'Payment setup failed. Please try again.');
+      }
+    } catch (err) {
+      document.getElementById('modalOverlay').classList.remove('open');
+      showToast('Network error. Please try again.');
+    } finally {
+      btn.textContent = 'Continue';
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // Handle Stripe redirect back to site after donation
+  (function handleStripeReturn() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('donated') === 'true') {
+      showToast('Thank you so much for your donation!');
+      // Clean the URL so it doesn't show on refresh
+      window.history.replaceState({}, '', '/');
+    } else if (params.get('donated') === 'cancelled') {
+      showToast('Donation cancelled — no charge was made.');
+      window.history.replaceState({}, '', '/');
+    }
+  })();
+
+  renderMain();
+</script>
+</body>
+</html>
